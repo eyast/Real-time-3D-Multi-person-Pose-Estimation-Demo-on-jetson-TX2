@@ -46,6 +46,7 @@ class CMakeBuild(build_ext):
 
         if platform.system() == 'Windows':
             platform_type = ('x64' if platform.architecture()[0] == '64bit' else 'Win32')
+            # platform_type = ""
             cmake_args += [
                 '-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE',
                 '-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), build_dir),

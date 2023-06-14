@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 import json
 import os, time
+import glob
 
 import cv2
 import numpy as np
@@ -8,6 +9,7 @@ import numpy as np
 from modules.input_reader import VideoReader, ImageReader
 from modules.draw import Plotter3d, draw_poses
 from modules.parse_poses import parse_poses
+from torchsummary import summary
 
 
 def rotate_poses(poses_3d, R, t):
@@ -77,7 +79,10 @@ if __name__ == '__main__':
     R = np.array(extrinsics['R'], dtype=np.float32)
     t = np.array(extrinsics['t'], dtype=np.float32)
 
-    frame_provider = ImageReader(args.images)
+    jpegs = glob.glob("*.jpg") 
+
+    #frame_provider = ImageReader(args.images)
+    frame_provider = ImageReader(jpegs)
     is_video = False
     if args.video != '':
         frame_provider = VideoReader(args.video)
@@ -100,15 +105,17 @@ if __name__ == '__main__':
         if fx < 0:  # Focal length is unknown
             fx = np.float32(0.8 * frame.shape[1])
         t0 = time.time()
+        print(f"Original shape: {frame.shape} - Scaled shape: {scaled_img.shape}")
         inference_result = net.infer(scaled_img)
-        print('Infer: {:1.3f}'.format(time.time()-t0))
+        # print(summary(net.net, scaled_img.transpose(2, 0, 1).shape))
+        # print('\nInfer: {:1.3f}'.format(time.time()-t0))
         # print(type(inference_result))
         # for ar in inference_result:
         #     print(ar.shape)
         # break
         t0 = time.time()
         poses_3d, poses_2d = parse_poses(inference_result, input_scale, stride, fx, is_video)
-        print('Extract: {:1.3f}'.format(time.time()-t0))
+        # print('Extract: {:1.3f}'.format(time.time()-t0))
         edges = []
         if len(poses_3d):
             poses_3d = rotate_poses(poses_3d, R, t)
