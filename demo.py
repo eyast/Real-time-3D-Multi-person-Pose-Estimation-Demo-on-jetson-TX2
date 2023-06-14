@@ -9,7 +9,6 @@ import numpy as np
 from modules.input_reader import VideoReader, ImageReader
 from modules.draw import Plotter3d, draw_poses
 from modules.parse_poses import parse_poses
-from torchsummary import summary
 
 
 def rotate_poses(poses_3d, R, t):

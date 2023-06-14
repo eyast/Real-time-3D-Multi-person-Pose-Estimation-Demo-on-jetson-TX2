@@ -3,15 +3,18 @@ CLASSIFY_DIR="python/training/classification"
 DETECTION_DIR="python/training/detection/ssd"
 RECOGNIZER_DIR="python/www/recognizer"
 
-DATA_VOLUME="\
---volume $PWD/data:$DOCKER_ROOT/data \
---volume $PWD/$CLASSIFY_DIR/data:$DOCKER_ROOT/$CLASSIFY_DIR/data \
---volume $PWD/$CLASSIFY_DIR/models:$DOCKER_ROOT/$CLASSIFY_DIR/models \
---volume $PWD/$DETECTION_DIR/data:$DOCKER_ROOT/$DETECTION_DIR/data \
---volume $PWD/$DETECTION_DIR/models:$DOCKER_ROOT/$DETECTION_DIR/models \
---volume $PWD/$RECOGNIZER_DIR/data:$DOCKER_ROOT/$RECOGNIZER_DIR/data"
+# DATA_VOLUME=""\
+# --volume $PWD/data:$DOCKER_ROOT/data \
+# --volume $PWD/$CLASSIFY_DIR/data:$DOCKER_ROOT/$CLASSIFY_DIR/data \
+# --volume $PWD/$CLASSIFY_DIR/models:$DOCKER_ROOT/$CLASSIFY_DIR/models \
+# --volume $PWD/$DETECTION_DIR/data:$DOCKER_ROOT/$DETECTION_DIR/data \
+# --volume $PWD/$DETECTION_DIR/models:$DOCKER_ROOT/$DETECTION_DIR/models \
+# --volume $PWD/$RECOGNIZER_DIR/data:$DOCKER_ROOT/$RECOGNIZER_DIR/data""
 
-USER_COMMAND="python3 ./pose.py"
+DATA_VOLUME="
+  --volume $PWD/:$DOCKER_ROOT/data"
+
+#USER_COMMAND="python3 ./pose.py"
 #USER_COMMAND = ""
 
 cat /proc/device-tree/model > /tmp/nv_jetson_model
